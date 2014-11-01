@@ -1,7 +1,13 @@
 <html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="/static/main.css">
+    </head>
     <body>
         <div>
             <a href="{{ url_for('admin.index') }}">Go to admin!</a>
+            {% for s in services %}
+                <h1>{{ s }}</h1>
+            {% endfor %}
         </div>
     </body>
 </html>

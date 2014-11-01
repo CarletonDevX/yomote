@@ -7,7 +7,7 @@ from wtforms import form, fields, validators
 
 
 # Create Flask application
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 db = pymongo.MongoClient().yofor
 
 # Create dummy secrey key so we can use sessions
@@ -46,6 +46,32 @@ class User():
     def __unicode__(self):
         return self.yo_handle if not self._none else ''
 
+
+# Create service model.
+class Service():
+    """
+    Fields
+    - _id
+    - code
+    - yo_handle
+    - need_extra
+    - fields
+    - name
+    - dscrpt
+    - public
+    """
+    def __init__(self, json):
+        self._id = json['_id'] if '_id' in json else None
+        self.code = json['code'] if 'code' in json else None
+        self.yo_handle = json['yo_handle'] if 'yo_handle' in json else None
+        self.need_extra = json['need_extra'] if 'need_extra' in json else None
+        self.fields = json['fields'] if 'fields' in json else None
+        self.name = json['name'] if 'name' in json else None
+        self.dscrpt = json['dscrpt'] if 'dscrpt' in json else None
+        self.public = json['public'] if 'public' in json else None
+
+    def __repr__(self):
+        return self.name
 
 # Define login and registration forms (for flask-login)
 class LoginForm(form.Form):
@@ -151,7 +177,8 @@ class MyAdminIndexView(admin.AdminIndexView):
 # Flask views
 @app.route('/')
 def index():
-    return render_template('index.html')
+    services = map(Service, db.services.find({'public': True}))
+    return render_template('index.html', services=services)
 
 
 # Initialize flask-login
