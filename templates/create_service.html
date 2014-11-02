@@ -1,10 +1,4 @@
-<html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="/static/main.css">
-        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script type="text/javascript" src="/static/create_service.js"></script>
-    </head>
-    <body>
+
         <header>
             <h1>Submit For</h1>
         </header>
@@ -14,6 +8,12 @@
             <br>
             <label for="dscrpt">Description</label>
             <textarea name="dscrpt"></textarea>
+            <br>
+            <span class="multi-input" data-name="tags">
+                <label>Tags</label>
+                <ul></ul>
+                <input type="text">
+            </span>
             <br>
             <span class="multi-input" data-name="tags">
                 <label>Tags</label>
@@ -35,5 +35,3 @@
             <br>
             <input type="submit" name="submit" value="Make Yo">
         </form>
-    </body>
-</html>

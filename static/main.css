@@ -95,6 +95,8 @@ html, body{
 }
 .addservice:after{
 	content: "+";
+	font-family: Montserrat, arial, sans-serif;
+	font-weight: bold;
 }
 
 .ratingnumber{
@@ -103,10 +105,9 @@ html, body{
 	right: 80px;
 	width: 100px;
 	text-align: left;
-font-family: Arial-BoldMT;
-font-size: 29px;
-color: #FFFFFF;
-line-height: 34px;
+	font-size: 29px;
+	color: #FFFFFF;
+	line-height: 34px;
 /*  787: */
 
 }
@@ -114,16 +115,20 @@ line-height: 34px;
 	position: absolute;
 	top: 35;
 	right: 190px;
-  display: inline-block;
-  width: 50px;
-  height: 35px;
-  opacity: .4;
-  cursor: pointer;
-  background: url('/static/upvote.png');
-  background-size: 100% 100%;
+  	display: inline-block;
+  	width: 50px;
+  	height: 35px;
+  	opacity: .4;
+  	cursor: pointer;
+  	background: url('/static/upvote.png');
+  	background-size: 100% 100%;
 } 
 
-
+#content {
+	width: 100%;
+	height: 100%;
+	overflow-y:auto; 
+}
 
 #topbanner{
 	background: #9B59B6;
@@ -133,6 +138,7 @@ line-height: 34px;
 	top: 0;
 	left: 0;
 	width: 100%;
+	text-decoration: none;
 }
 
 #titlebox{
@@ -144,6 +150,7 @@ border: 6px solid #FFFFFF;
 background-color: #3498D8;
 line-height: 74px;
 text-align: center;
+text-decoration: none;
 height: 80px;
 width: 390px;
 margin-left: auto;
@@ -246,7 +253,6 @@ margin-right: auto;
 	box-sizing: border-box;
 	margin: 0;
 	background-color: #9B59B6;
-	overflow-y: auto;
 }
 
 #full-body{
