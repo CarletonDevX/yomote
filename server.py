@@ -245,7 +245,8 @@ class MyAdminIndexView(admin.AdminIndexView):
 def index():
     services = map(Service,
         db.services.find({'yo_handle': {'$exists': 1}}).limit(100))
-    return render_template('index.html', services=services)
+    return render_template('index.html', services=services,
+        c=('#' if login.current_user.is_authenticated() else '/admin'))
 
 
 @app.route('/recent')
@@ -383,11 +384,12 @@ def add_yo2(service_id):
     s = Service(cursor.next())
     if s.need_extra:
         data = {x: request.form[x] for x in request.form if x in s.fields}
-        if len(data.keys) != len(s.fields):
+        if len(data.keys()) != len(s.fields):
             return render_template('add_params.html', s_id=s._id, fields=s.fields)
-        db.user_data.insert({'user': ObjectId(login.current_user._id),
-                             'services': s._id, 'data': data})
-        return redirect('/')
+        db.user_data.update({'user': ObjectId(login.current_user._id),
+                             'service': s._id},
+                            {'$set': {'data': data}}, upsert=True)
+        return redirect('http://www.justyo.co/%s/' % s.yo_handle)
     else:
         return redirect('http://www.justyo.co/%s/' % s.yo_handle)
 
@@ -433,7 +435,7 @@ init_login()
 
 
 # Create admin
-admin = admin.Admin(app, 'Example: Auth', index_view=MyAdminIndexView(),
+admin = admin.Admin(app, 'Accounts', index_view=MyAdminIndexView(),
     base_template='my_master.html')
 
 

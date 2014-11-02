@@ -5,6 +5,29 @@
         <script type="text/javascript" src="/static/index.js"></script>
     </head>
     <body>
+<style type="text/css">
+input[type="submit"]{
+    top:0px;
+    color:#FFFFFF;
+    margin-top: 10px;
+    border: 3px solid #FFFFFF;
+    margin-bottom: 17px;
+    padding: 10px 20px;
+    width: 270px;
+    background: rgba(255,255,255,.2);
+    display: inline-block;
+    font-family: Montserrat, arial, sans-serif;
+    font-weight: bold;
+    font-size: 30px;
+    text-transform: uppercase;
+}
+p, p a{
+    font-family: Montserrat, arial, sans-serif;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 24px;
+}
+</style>
         <header id="topbanner">
             <h1 id="titlebox">Yomote</h1>
         </header>
@@ -14,11 +37,9 @@
             <a href="{{ callback }}">{{ callback }}</a>
         </p>
         <form method="POST" action="/finish/{{ s_id }}">
-            <label for="yo_handle">The Yo username for this service:</label>
-            <input type="text" name="yo_handle">
+            <input class="input" type="text" name="yo_handle" placeholder="Yo username for this">
             <br>
-            <label for="yo_api_key">The API-Key for this username:</label>
-            <input type="text" name="yo_api_key">
+            <input class="input" type="text" name="yo_api_key" placeholder="Yo API-Key">
             <br>
             <input type="submit" value="Finish">
         </form>

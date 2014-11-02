@@ -30,4 +30,7 @@ $(document).ready(function () {
       }
     }
   });
+  $('#the-unhider').click(function () {
+    $("#extra-hidden").toggle();
+  });
 });

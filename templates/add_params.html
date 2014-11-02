@@ -5,18 +5,42 @@
         <script type="text/javascript" src="/static/index.js"></script>
     </head>
     <body>
+<style type="text/css">
+input[type="submit"]{
+    top:0px;
+    color:#FFFFFF;
+    margin-top: 10px;
+    border: 3px solid #FFFFFF;
+    margin-bottom: 17px;
+    padding: 10px 20px;
+    width: 270px;
+    background: rgba(255,255,255,.2);
+    display: inline-block;
+    font-family: Montserrat, arial, sans-serif;
+    font-weight: bold;
+    font-size: 30px;
+    text-transform: uppercase;
+}
+p, p a{
+    font-family: Montserrat, arial, sans-serif;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 24px;
+}
+</style>
         <header id="topbanner">
             <h1 id="titlebox">Yomote</h1>
         </header>
         <div id="full-body">
         <p>
-            The callback for "{{ s_name }}" is:<br>
-            <a href="{{ callback }}">{{ callback }}</a>
+            Fill out your specific info:
         </p>
         <form method="POST" action="/add/{{ s_id }}">
             {% for f in fields %}
-            <input calss="input" type="text" name="{{f}}" placeholder="{{f}}" required="required">
+            <input class="input" type="text" name="{{f}}" placeholder="{{f}}" required="required">
+            <br>
             {% endfor %}
+            <input type="submit" value="Submit">
         </form>
         </div>
     </body>
