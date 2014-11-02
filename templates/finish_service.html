@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="/static/main.css">
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script type="text/javascript" src="/static/index.js"></script>
+    </head>
+    <body>
+        <header id="topbanner">
+            <h1 id="titlebox">Yomote</h1>
+        </header>
+        <div id="full-body">
+        <p>
+            The callback for "{{ s_name }}" is:<br>
+            <a href="{{ callback }}">{{ callback }}</a>
+        </p>
+        <form method="POST" action="/finish/{{ s_id }}">
+            <label for="yo_handle">The Yo username for this service:</label>
+            <input type="text" name="yo_handle">
+            <br>
+            <label for="yo_api_key">The API-Key for this username:</label>
+            <input type="text" name="yo_api_key">
+            <br>
+            <input type="submit" value="Finish">
+        </form>
+        </div>
+    </body>
+</html>

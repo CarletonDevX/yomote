@@ -248,3 +248,17 @@ margin-right: auto;
 	background-color: #9B59B6;
 	overflow-y: auto;
 }
+
+#full-body{
+	width: 100%;
+	height: 100%;
+	padding-top: 211px;
+	overflow: hidden;
+	box-sizing: border-box;
+	margin: 0;
+	text-align: center;
+	font-family: Montserrat, arial, sans-serif;
+	font-weight: bold;
+	color: #FFFFFF;
+	background: #9B59B6;
+}

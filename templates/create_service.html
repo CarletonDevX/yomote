@@ -12,16 +12,23 @@
             <label for="name">Name</label>
             <input type="text" name="name">
             <br>
-            <label for="description">Description</label>
-            <input type="text" name="description">
+            <label for="dscrpt">Description</label>
+            <textarea name="dscrpt"></textarea>
+            <br>
+            <span class="multi-input" data-name="tags">
+                <label>Tags</label>
+                <ul></ul>
+                <input type="text">
+            </span>
             <br>
             <label for="code">Code</label>
-            <input type="text" name="code">
+            <textarea name="code"></textarea>
             <br>
             <label for="need_extra">Need Extra</label>
             <input type="checkbox" name="need_extra">
             <br>
-            <span class="multi-input" data-name="extras">
+            <span class="multi-input" data-name="fields">
+                <label>Extra required fields</label>
                 <ul></ul>
                 <input type="text">
             </span>

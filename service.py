@@ -1,7 +1,8 @@
 import random
+import re
 
 import requests
-
+from bson.objectid import ObjectId
 import creds
 
 def random_yo_handle():
@@ -22,10 +23,14 @@ class Service():
     - fields
     - name
     - dscrpt
+    - tags
     - public
+    - need_loc
+    - rating
+    - owner
     """
     def __init__(self, json):
-        self._id = str(json['_id']) if '_id' in json else None
+        self._id = json['_id'] if '_id' in json else None
         self.code = json['code'] if 'code' in json else None
         self.yo_handle = json['yo_handle'] if 'yo_handle' in json else None
         self.yo_api_key = json['yo_api_key'] if 'yo_api_key' in json else None
@@ -33,8 +38,9 @@ class Service():
         self.fields = json['fields'] if 'fields' in json else None
         self.name = json['name'] if 'name' in json else None
         self.dscrpt = json['dscrpt'] if 'dscrpt' in json else None
-        self.public = json['public'] if 'public' in json else None
-        self.need_loc = json['need_loc'] if 'need_loc' in json else None
+        self.tags = json['tags'] if 'tags' in json else None
+        self.rating = json['rating'] if 'rating' in json else 0
+        self.owner = json['owner'] if 'owner' in json else None
 
     def _to_dict(self, include_id=True):
         d = {}
@@ -54,16 +60,19 @@ class Service():
             d['name'] = self.name
         if self.dscrpt is not None:
             d['dscrpt'] = self.dscrpt
-        if self.public is not None:
-            d['public'] = self.public
-        if self.need_loc is not None:
-            d['need_loc'] = self.need_loc
+        if self.tags is not None:
+            d['tags'] = self.tags
+        if self.rating is not None:
+            d['rating'] = self.rating
+        if self.owner is not None:
+            d['owner'] = self.owner
         return d
 
     def __repr__(self):
         return self.name
 
     def _make_yo_handle(self, db):
+        return False  # TODO
         if self._id is None:
             return False
         while True:
@@ -73,7 +82,7 @@ class Service():
                 data={
                     'new_account_username': handle,
                     'new_account_passcode': creds.universal_password,
-                    'callback_url': 'http://yomote.co/yoback/' + self._id
+                    'callback_url': 'http://yomote.co/yoback/' + self._id,
                     'needs_location': self.needs_location,
                     'api_token': creds.yo_api_key
                 })
@@ -82,17 +91,23 @@ class Service():
         return True
 
     def save(self, db):
-        if self._id:
-            if db.services.find({'_id': self.id}).count() > 0:
-                db.services.update({'_id': self.id},
+        if self._id is not None:
+            print 'id not none'
+            if db.services.find({'_id': self._id}).count() > 0:
+                print 'service exists'
+                db.services.update({'_id': self._id},
                                    {'$set': self._to_dict(False)})
                 return True
+            print "service doesn't"
             return False
-        self._id = str(db.services.insert(self._to_dict()))
+        print 'id none'
+        self._id = db.services.insert(self._to_dict())
+        print self._id
         return True
 
     def run(self, db, req):
         def subscribers_count():
+            print 'counting'
             r = requests.get(
                 'https://api.justyo.co/subscribers_count/',
                 params={'api_token': self.yo_api_key})
@@ -100,15 +115,18 @@ class Service():
                 return r.json()['result']
 
         def yoall(link=None):
+            print 'yoing all'
             params = {'api_token': self.yo_api_key}
             if link is not None:
                 params['link'] = link
             r = requests.post(
                 'https://api.justyo.co/yoall/',
                 params=params)
+            print r.ok, r.text
             return r.ok
 
-        def yo(self, username, link=None, location=None):
+        def yo(username, link=None, location=None):
+            print 'yoing %s' % username
             data = {'username': username.upper(), 'api_token': self.yo_api_key}
             if link is not None:
                 data['link'] = link
@@ -117,6 +135,21 @@ class Service():
             r = requests.post(
                 'https://api.justyo.co/yo/',
                 data=data)
+            print r.ok, r.text
             return r.ok
 
-        pass
+        globals_ = {'requests': requests, 're': re}
+        locals_ = {
+            'subscribers_count': subscribers_count,
+            'yoall': yoall,
+            'yo': yo,
+            'username': req['username']}
+        # TODO add user specific data
+        if 'location' in req:
+            locals_['location'] = req['location']
+        if 'link' in req:
+            locals_['link'] = req['link']
+        try:
+            eval(self.code, globals_, locals_)
+        except Exception, e:
+            print e
