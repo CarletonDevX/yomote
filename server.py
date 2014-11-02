@@ -59,6 +59,7 @@ class Service():
     - name
     - dscrpt
     - public
+    - rating
     """
     def __init__(self, json):
         self._id = json['_id'] if '_id' in json else None
@@ -69,6 +70,7 @@ class Service():
         self.name = json['name'] if 'name' in json else None
         self.dscrpt = json['dscrpt'] if 'dscrpt' in json else None
         self.public = json['public'] if 'public' in json else None
+        self.rating = json['rating'] if 'rating' in json else None
 
     def __repr__(self):
         return self.name

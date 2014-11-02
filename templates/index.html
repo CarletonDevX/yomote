@@ -1,12 +1,34 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="/static/main.css">
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script type="text/javascript" src="/static/index.js"></script>
     </head>
     <body>
-        <div>
-            <a href="{{ url_for('admin.index') }}">Go to admin!</a>
+        <div id="main">
+            <header id="topbanner">
+                    <h1 id="titlebox">Yomote</h1>
+            </header>
+            <nav id="search-nav">
+                <div id="search-box">
+                    <input id="input" type="text" placeholder="Search">
+                </div>
+                <ul id="nav-buttonsection">
+                    <li>New</li><br>
+                    <li>Hot</li><br>
+                    <li>About</li><br>
+                    <li>Create</li><br>
+                </ul>
+            </nav>
+
             {% for s in services %}
-                <h1>{{ s }}</h1>
+            <div class="service">
+                    <h1 class="servicetitle">{{s.name }}</h1>
+                    <h2 class="servicedescription">{{s.dscrpt}}</h2>
+                <h3 class="ratingnumber">{{s.rating }}</h3>
+                <a class="vote"></a>
+                <a class="addservice"></a>
+            </div>
             {% endfor %}
         </div>
     </body>
