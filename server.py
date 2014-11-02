@@ -365,7 +365,7 @@ def add_yo(service_id):
         return redirect('/sry/no%20such%20service%20exists')
     s = Service(cursor.next())
     if s.need_extra:
-        return render_template('add_params.html', s_id=s._id, fields=s.fields)
+        return render_template('add_params.html', s_id=s._id, fields=(s.fields or []))
     else:
         return redirect('http://www.justyo.co/%s/' % s.yo_handle)
 

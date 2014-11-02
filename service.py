@@ -36,7 +36,7 @@ class Service():
         self.code = json['code'] if 'code' in json else None
         self.yo_handle = json['yo_handle'] if 'yo_handle' in json else None
         self.yo_api_key = json['yo_api_key'] if 'yo_api_key' in json else None
-        self.need_extra = 'need_extra' in json
+        self.need_extra = 'need_extra' in json and (json['need_extra'].strip() != '')
         self.fields = json['fields'] if ('fields' in json and self.need_extra) else None
         self.name = json['name'] if 'name' in json else None
         self.dscrpt = json['dscrpt'] if 'dscrpt' in json else None
