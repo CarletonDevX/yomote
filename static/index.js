@@ -9,9 +9,19 @@ $(document).ready(function () {
 		}
 		prev=i;
 		$(this).addClass(classes[i]);
-		console.log(this);
 	});
-	$('.vote').click(function () {
-  	$(this).toggleClass('on');
-});
+
+	$('.about').click(function(){
+		$( "#content" ).load( "/static/about.html", function() {
+			console.log("loaded script successfully");
+		} );
+		return false;
+	});
+
+	$('.create').click(function(){
+		$( "#content" ).load( "/create", function() {
+			console.log("loaded script successfully");
+		} );
+		return false;
+	})
 });

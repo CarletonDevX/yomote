@@ -7,7 +7,7 @@
     <body>
         <div id="main">
             <header id="topbanner">
-                    <h1 id="titlebox">Yomote</h1>
+                    <a style="text-decoration:none" href="http://yomote.co"> <h1 id="titlebox">Yomote</h1></a>
             </header>
             <nav id="search-nav">
                 <div id="search-box">
@@ -16,19 +16,21 @@
                 <ul id="nav-buttonsection">
                     <li>New</li><br>
                     <li>Hot</li><br>
-                    <a href="/about"><li>About</li></a><br>
-                    <a href="/create"><li>Create</li></a><br>
+                    <a class="about" href="#"><li>About</li></a><br>
+                    <a class="create" href="#"><li>Create</li></a><br>
                 </ul>
             </nav>
-            {% for s in services %}
-            <div class="service">
-                    <h1 class="servicetitle">{{s.name }}</h1>
-                    <h2 class="servicedescription">{{s.dscrpt}}</h2>
-                <h3 class="ratingnumber">{{s.rating }}</h3>
-                <a class="vote"></a>
-                <a class="addservice"></a>
+            <div id="content">
+                {% for s in services %}
+                <div class="service">
+                        <h1 class="servicetitle">{{s.name }}</h1>
+                        <h2 class="servicedescription">{{s.dscrpt}}</h2>
+                        <h3 class="ratingnumber">{{s.rating }}</h3>
+                            <a class="vote"></a>
+                            <a class="addservice"></a>
+                </div>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </body>
 </html>
