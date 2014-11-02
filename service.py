@@ -4,6 +4,7 @@ from datetime import datetime
 
 import requests
 from bson.objectid import ObjectId
+from twilio.rest import TwilioRestClient
 import creds
 
 def random_yo_handle():
@@ -143,7 +144,7 @@ class Service():
             print r.ok, r.text
             return r.ok
 
-        globals_ = {'requests': requests, 're': re, 'now': datetime.now}
+        globals_ = {'requests': requests, 're': re, 'now': datetime.now, 'TwilioRestClient': TwilioRestClient}
         locals_ = {
             'subscribers_count': subscribers_count,
             'yoall': yoall,
