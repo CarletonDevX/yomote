@@ -4,25 +4,25 @@
         </header>
         <form method="POST" action="/create">
             <label for="name">Name</label>
-            <input type="text" name="name">
+            <input type="text" name="name" required>
             <br>
             <label for="dscrpt">Description</label>
-            <textarea name="dscrpt"></textarea>
+            <textarea name="dscrpt" required></textarea>
             <br>
             <span class="multi-input" data-name="tags">
                 <label>Tags</label>
                 <ul></ul>
-                <input type="text">
+                <input type="text" required>
             </span>
             <br>
             <span class="multi-input" data-name="tags">
                 <label>Tags</label>
                 <ul></ul>
-                <input type="text">
+                <input type="text" required>
             </span>
             <br>
             <label for="code">Code</label>
-            <textarea name="code"></textarea>
+            <textarea name="code" required></textarea>
             <br>
             <label for="need_extra">Need Extra</label>
             <input type="checkbox" name="need_extra">
