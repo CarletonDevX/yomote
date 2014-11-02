@@ -36,7 +36,7 @@ class Service():
         self.code = json['code'] if 'code' in json else None
         self.yo_handle = json['yo_handle'] if 'yo_handle' in json else None
         self.yo_api_key = json['yo_api_key'] if 'yo_api_key' in json else None
-        self.need_extra = 'need_extra' in json and isinstance(json['need_extra'], (str,unicode) and (json['need_extra'].strip() != '')
+        self.need_extra = json['need_extra'] if 'need_extra' in json else None
         self.fields = json['fields'] if ('fields' in json and self.need_extra) else None
         self.name = json['name'] if 'name' in json else None
         self.dscrpt = json['dscrpt'] if 'dscrpt' in json else None
@@ -143,7 +143,7 @@ class Service():
             print r.ok, r.text
             return r.ok
 
-        globals_ = {'requests': requests, 're': re}
+        globals_ = {'requests': requests, 're': re, 'now': datetime.now}
         locals_ = {
             'subscribers_count': subscribers_count,
             'yoall': yoall,

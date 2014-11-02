@@ -8,6 +8,8 @@ from wtforms import form, fields, validators
 import pymongo
 import requests
 
+import creds
+
 # Create Flask application
 app = Flask(__name__, static_folder='static')
 db = pymongo.MongoClient().yomote
@@ -228,7 +230,7 @@ class MyAdminIndexView(admin.AdminIndexView):
     def get_token(self):
        form=ForgetPasswordForm(request.values)
        if helpers.validate_form_on_submit(form):
-         yosend=Yo(token='235e961d-a1f3-429b-9f57-290a99fa8712')
+         yosend=Yo(token=creds.yo_api_key)
          uid=str(db.resettoken.insert({"yo_handle":str(form.yo_handle.data)}))
          yosend.youser(str(form.yo_handle.data),"http://7fb2443b.ngrok.com/reset/"+uid)
          return 'Check your Yo to reset password!'
