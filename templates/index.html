@@ -7,7 +7,7 @@
     <body>
         <div id="main">
             <header id="topbanner">
-                    <a style="text-decoration:none" href="http://yomote.co"> <h1 id="titlebox">Yomote</h1></a>
+                <a style="text-decoration:none" href="http://yomote.co"> <h1 id="titlebox">Yomote</h1></a>
             </header>
             <nav id="search-nav">
                 <div id="search-box">
@@ -23,11 +23,11 @@
             <div id="content">
                 {% for s in services %}
                 <div class="service">
-                        <h1 class="servicetitle">{{s.name }}</h1>
-                        <h2 class="servicedescription">{{s.dscrpt}}</h2>
-                        <h3 class="ratingnumber">{{s.rating }}</h3>
-                            <a class="vote"></a>
-                            <a class="addservice"></a>
+                    <h1 class="servicetitle">{{s.name }}</h1>
+                    <h2 class="servicedescription">{{s.dscrpt}}</h2>
+                    <h3 class="ratingnumber">{{s.rating }}</h3>
+                    <a class="vote"></a>
+                    <a class="addservice"></a>
                 </div>
                 {% endfor %}
             </div>

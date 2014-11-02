@@ -1,12 +1,12 @@
+from bson.objectid import ObjectId
 from flask import Flask, url_for, redirect, render_template, request, abort
 from flask.ext import admin, login
 from flask.ext.admin import helpers, expose
-import pymongo
-from bson.objectid import ObjectId
+from service import Service
 from werkzeug.security import generate_password_hash, check_password_hash
 from wtforms import form, fields, validators
-
-from service import Service
+import pymongo
+import requests
 
 # Create Flask application
 app = Flask(__name__, static_folder='static')
@@ -14,6 +14,54 @@ db = pymongo.MongoClient().yomote
 
 # Create dummy secrey key so we can use sessions
 app.config['SECRET_KEY'] = 'asdfyoloswag'
+
+# the YoAPI
+
+class Yo:
+    def __init__(self, token):
+        self.token = token
+
+    def number(self):
+        """
+        Function to GET the the number of subscribers of the API user account.
+        Returns number of subscribers as an integer.
+        If request is unsuccessful, raises an error.
+        """
+        number_url = "http://api.justyo.co/subscribers_count/?api_token=" + self.token
+        number = requests.get(number_url)
+        if number.status_code == requests.codes.ok:
+            return number.json()["result"]
+        else:
+            number.raise_for_status()
+
+    def yoall(self, *link):
+        """
+        Function to send a Yo to all subscribers of the API user account.
+        If request is successful, returns true.
+        If request is unsuccessful, raises an error.
+        """
+        yoall_data = {"api_token": self.token, "link": link}
+        yoall_url = "http://api.justyo.co/yoall/"
+        yoall = requests.post(yoall_url, data=yoall_data)
+        if yoall.status_code == requests.codes.created:
+               return True
+        else:
+               yoall.raise_for_status()
+
+    def youser(self, username, *link):
+        """
+        Function to send a Yo to a specific username.
+        If request is successful, returns true.
+        If request is unsuccessful, raises an error.
+        """
+        username = username.upper()
+        youser_data = {"api_token": self.token, "username": username, "link": link}
+        youser_url = "http://api.justyo.co/yo/"
+        youser = requests.post(youser_url, data=youser_data)
+        if youser.status_code == requests.codes.ok:
+            return True
+        else:
+            yoall.raise_for_status()
 
 # Create user model.
 class User():
@@ -49,6 +97,21 @@ class User():
         return self.yo_handle if not self._none else ''
 
 
+# Define the User password reset token database
+class ResetPassword():
+    """
+    Fields
+    - _id
+    - yo_handle
+    """
+    def __init__(self, json):
+        if json is None:
+            self._none = True
+        else:
+            self._none = False
+            self._id = str(json['_id'])
+            self.yo_handle = json['yo_handle']
+
 # Define login and registration forms (for flask-login)
 class LoginForm(form.Form):
     yo_handle = fields.TextField(validators=[validators.required()])
@@ -79,8 +142,22 @@ class RegistrationForm(form.Form):
     password = fields.PasswordField(validators=[validators.required()])
 
     def validate_yo_handle(self, field):
-        if db.users.find({'yo_handle': self.yo_handle.data.upper()}).count() > 0:
+        yh = self.yo_handle.data.upper()
+        if db.users.find({'yo_handle': yh}).count() > 0:
             raise validators.ValidationError('Duplicate username')
+
+
+class ResetForm(form.Form):
+    yo_handle = fields.HiddenField('',[validators.Required(),])
+    newpassword = fields.PasswordField(
+        'New Password', [validators.Required(),])
+    confirmpassword = fields.PasswordField(
+        'Confirm New Password',
+        [validators.Required(),
+         validators.EqualTo('newpassword',message='Password Must Match')])
+
+class ForgetPasswordForm(form.Form):
+    yo_handle=fields.TextField('Yo Handle',[validators.Required(),])
 
 
 # Initialize flask-login
@@ -119,7 +196,10 @@ class MyAdminIndexView(admin.AdminIndexView):
             return redirect(url_for('.index'))
         link = "<p>Don\'t have an account? <a href='" + \
                url_for('.register_view') + \
-               "'>Click here to register.</a></p>"
+               "'>Click here to register.</a></p>" + \
+                "<p>Forget your password? <a href='" + \
+               url_for('.get_token') + \
+               "'>Reset Here.</a></p>"
         self._template_args['form'] = form
         self._template_args['link'] = link
         return super(MyAdminIndexView, self).index()
@@ -143,6 +223,16 @@ class MyAdminIndexView(admin.AdminIndexView):
         self._template_args['form'] = form
         self._template_args['link'] = link
         return super(MyAdminIndexView, self).index()
+
+    @expose('/forgetpassword/',methods=('GET','POST'))
+    def get_token(self):
+       form=ForgetPasswordForm(request.values)
+       if helpers.validate_form_on_submit(form):
+         yosend=Yo(token='235e961d-a1f3-429b-9f57-290a99fa8712')
+         uid=str(db.resettoken.insert({"yo_handle":str(form.yo_handle.data)}))
+         yosend.youser(str(form.yo_handle.data),"http://yomote.co/"+uid)
+         return 'Check your Yo to reset password!'
+       return render_template("reset.html", form=form)
 
     @expose('/logout/')
     def logout_view(self):
@@ -246,6 +336,23 @@ def yoback(service_id, methods=('POST',)):
     s.run(db, data)
     return 'yo'
 
+
+#look up the token and direct to reset form
+@app.route('/reset/<token>', methods=['GET', 'POST'])
+def reset(token):
+    cursor = db.resettoken.find({'_id': ObjectId(token)})
+    count=cursor.count()
+    if count==1:
+            usrn=cursor.next()['yo_handle']
+    else: return str(count)
+    form=ResetForm(request.values,yo_handle=usrn)
+    if request.method == 'POST' and form.validate():
+        handle=form.data['yo_handle']
+        psw=form.data['newpassword']
+        db.users.update({"yo_handle" : handle},{'$set':{ "password":generate_password_hash(psw)
+}})
+        return redirect('/')
+    return render_template("reset.html", form=form)
 
 # Initialize flask-login
 init_login()
