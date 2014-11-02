@@ -8,7 +8,7 @@ from wtforms import form, fields, validators
 
 # Create Flask application
 app = Flask(__name__, static_folder='static')
-db = pymongo.MongoClient().yofor
+db = pymongo.MongoClient().yomote
 
 # Create dummy secrey key so we can use sessions
 app.config['SECRET_KEY'] = 'asdfyoloswag'

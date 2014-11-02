@@ -197,7 +197,7 @@ margin-right: auto;
 	list-style-type: none;
 	display: block;
 	box-sizing: border-box;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
 #nav-buttonsection li{
 	color:#FFFFFF;
@@ -240,5 +240,5 @@ margin-right: auto;
 	box-sizing: border-box;
 	margin: 0;
 	background-color: #9B59B6;
-	overflow-y: scroll;
+	overflow-y: auto;
 }
