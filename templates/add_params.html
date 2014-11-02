@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="/static/main.css">
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <script type="text/javascript" src="/static/index.js"></script>
+    </head>
+    <body>
+        <header id="topbanner">
+            <h1 id="titlebox">Yomote</h1>
+        </header>
+        <div id="full-body">
+        <p>
+            The callback for "{{ s_name }}" is:<br>
+            <a href="{{ callback }}">{{ callback }}</a>
+        </p>
+        <form method="POST" action="/add/{{ s_id }}">
+            {% for f in fields %}
+            <input calss="input" type="text" name="{{f}}" placeholder="{{f}}" required="required">
+            {% endfor %}
+        </form>
+        </div>
+    </body>
+</html>

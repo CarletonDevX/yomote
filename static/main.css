@@ -90,7 +90,7 @@ html, body{
 	line-height: .79;
 	border-radius: 8px;
 	display: inline-block;
-	
+	text-decoration: none;
 	border: 5px solid #FFFFFF;
 }
 .addservice:after{

@@ -352,6 +352,46 @@ def sry(text):
     return render_template('sry.html', text=text)
 
 
+@app.route('/add/<service_id>', methods=('GET',))
+def add_yo(service_id):
+    oid = None
+    try:
+        oid = ObjectId(service_id)
+    except Exception, e:
+        return redirect('/sry/poorly%20formed%20url')
+    cursor = db.services.find({'_id': oid, 'yo_handle': {'$exists': 1}})
+    if cursor.count() == 0:
+        return redirect('/sry/no%20such%20service%20exists')
+    s = Service(cursor.next())
+    if s.need_extra:
+        return render_template('add_params.html', s_id=s._id, fields=s.fields)
+    else:
+        return redirect('http://www.justyo.co/%s/' % s.yo_handle)
+
+@app.route('/add/<service_id>', methods=('POST',))
+def add_yo2(service_id):
+    if not login.current_user.is_authenticated():
+        return redirect(url_for('admin.login_view'))
+    oid = None
+    try:
+        oid = ObjectId(service_id)
+    except Exception, e:
+        return redirect('/sry/poorly%20formed%20url')
+    cursor = db.services.find({'_id': oid, 'yo_handle': {'$exists': 1}})
+    if cursor.count() == 0:
+        return redirect('/sry/no%20such%20service%20exists')
+    s = Service(cursor.next())
+    if s.need_extra:
+        data = {x: request.form[x] for x in request.form if x in s.fields}
+        if len(data.keys) != len(s.fields):
+            return render_template('add_params.html', s_id=s._id, fields=s.fields)
+        db.user_data.insert({'user': ObjectId(login.current_user._id),
+                             'services': s._id, 'data': data})
+        return redirect('/')
+    else:
+        return redirect('http://www.justyo.co/%s/' % s.yo_handle)
+
+
 @app.route('/yoback/<service_id>')
 def yoback(service_id, methods=('POST',)):
     print 'got yo'
