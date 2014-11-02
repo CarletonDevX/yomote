@@ -1,37 +1,26 @@
-
-        <header>
-            <h1>Submit For</h1>
-        </header>
-        <form method="POST" action="/create">
-            <label for="name">Name</label>
-            <input type="text" name="name">
-            <br>
-            <label for="dscrpt">Description</label>
-            <textarea name="dscrpt"></textarea>
-            <br>
-            <span class="multi-input" data-name="tags">
-                <label>Tags</label>
-                <ul></ul>
-                <input type="text">
-            </span>
-            <br>
-            <span class="multi-input" data-name="tags">
-                <label>Tags</label>
-                <ul></ul>
-                <input type="text">
-            </span>
-            <br>
-            <label for="code">Code</label>
-            <textarea name="code"></textarea>
-            <br>
-            <label for="need_extra">Need Extra</label>
-            <input type="checkbox" name="need_extra">
-            <br>
-            <span class="multi-input" data-name="fields">
-                <label>Extra required fields</label>
-                <ul></ul>
-                <input type="text">
-            </span>
-            <br>
-            <input type="submit" name="submit" value="Make Yo">
-        </form>
+<header>
+    <link rel="stylesheet" type="text/css" href="/static/create_service.css">
+    <script type="text/javascript" src="/static/create_service.js"></script>
+</header>
+<form method="POST" action="/create">
+    <input class="input" type="text" name="name" placeholder="Service Name">
+    <br>
+    <textarea class="input" name="dscrpt" placeholder="Description"></textarea>
+    <br>
+    <span class="multi-input" data-name="tags">
+        <ul></ul>
+        <input class="input" type="text" placeholder="tag relevant topics">
+    </span>
+    <br>
+    <textarea class="input" name="code" placeholder="paste/type your code"></textarea>
+    <br>
+    <label for="need_extra">Need Extra Info</label>
+    <input class="input" type="checkbox" name="need_extra">
+    <br>
+    <span class="multi-input" data-name="fields">
+        <ul></ul>
+        <input class="input" type="text" placeholder="Required Extra info">
+    </span>
+    <br>
+    <input id="submit" type="submit" name="submit" value="Make Yo">
+</form>

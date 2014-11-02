@@ -111,18 +111,6 @@ html, body{
 /*  787: */
 
 }
-.vote {
-	position: absolute;
-	top: 35;
-	right: 190px;
-  	display: inline-block;
-  	width: 50px;
-  	height: 35px;
-  	opacity: .4;
-  	cursor: pointer;
-  	background: url('/static/upvote.png');
-  	background-size: 100% 100%;
-} 
 
 #content {
 	width: 100%;
@@ -184,7 +172,7 @@ margin-right: auto;
 	z-index: 1;
 }
 
-#input{
+.input{
 	margin-top: 25px;
 	height: 30px;
 	font-size: 22px;
@@ -234,10 +222,6 @@ margin-right: auto;
 .addservice:hover{
 	cursor:pointer;
 	background:rgba(255,255,255,.3)
-}
-
-.vote:hover {
-  opacity:.8;
 }
 
 
