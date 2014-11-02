@@ -230,7 +230,7 @@ class MyAdminIndexView(admin.AdminIndexView):
        if helpers.validate_form_on_submit(form):
          yosend=Yo(token='235e961d-a1f3-429b-9f57-290a99fa8712')
          uid=str(db.resettoken.insert({"yo_handle":str(form.yo_handle.data)}))
-         yosend.youser(str(form.yo_handle.data),"http://yomote.co/"+uid)
+         yosend.youser(str(form.yo_handle.data),"http://7fb2443b.ngrok.com/reset/"+uid)
          return 'Check your Yo to reset password!'
        return render_template("reset.html", form=form)
 
