@@ -1,5 +1,6 @@
 import random
 import re
+from datetime import datetime
 
 import requests
 from bson.objectid import ObjectId
@@ -28,6 +29,7 @@ class Service():
     - need_loc
     - rating
     - owner
+    - ts
     """
     def __init__(self, json):
         self._id = json['_id'] if '_id' in json else None
@@ -41,6 +43,7 @@ class Service():
         self.tags = json['tags'] if 'tags' in json else None
         self.rating = json['rating'] if 'rating' in json else 0
         self.owner = json['owner'] if 'owner' in json else None
+        self.ts = json['ts'] if 'ts' in json else datetime.now()
 
     def _to_dict(self, include_id=True):
         d = {}
@@ -66,6 +69,8 @@ class Service():
             d['rating'] = self.rating
         if self.owner is not None:
             d['owner'] = self.owner
+        if self.ts is not None:
+            d['ts'] = self.ts
         return d
 
     def __repr__(self):

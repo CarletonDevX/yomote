@@ -334,6 +334,7 @@ def yoback(service_id, methods=('POST',)):
     data = {x: request.args[x] for x in request.args
             if x in ['username', 'link', 'location']}
     s.run(db, data)
+    db.services.update({'_id': s._id}, {'$inc': {'rating': 1}})
     return 'yo'
 
 
