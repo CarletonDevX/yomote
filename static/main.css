@@ -172,7 +172,7 @@ margin-right: auto;
 	z-index: 1;
 }
 
-.input{
+.input, #nav-search{
 	margin-top: 25px;
 	height: 30px;
 	font-size: 22px;

@@ -243,8 +243,41 @@ class MyAdminIndexView(admin.AdminIndexView):
 # Flask views
 @app.route('/')
 def index():
-    services = map(Service, db.services.find({'yo_handle': {'$exists': 1}}))
+    services = map(Service,
+        db.services.find({'yo_handle': {'$exists': 1}}).limit(100))
     return render_template('index.html', services=services)
+
+
+@app.route('/recent')
+def recent_yos():
+    services = map(Service,
+        db.services.find(
+            {'yo_handle': {'$exists': 1}}
+        ).sort('ts', pymongo.DESCENDING).limit(100))
+    return render_template('services.html', services=services)
+
+
+@app.route('/hot')
+def hot_yos():
+    services = map(Service,
+        db.services.find(
+            {'yo_handle': {'$exists': 1}}
+        ).sort('rating', pymongo.DESCENDING).limit(100))
+    return render_template('services.html', services=services)
+
+
+@app.route('/search')
+def search_yos():
+    search_terms = request.args['search'].strip().split()
+    services = map(Service,
+        db.services.find(
+            {'$or':[
+                {'tags': {'$in': search_terms}},
+                {'dscrpt': {'$regex': '|'.join(search_terms)}},
+                {'name': {'$regex': '|'.join(search_terms)}}
+            ], 'yo_handle': {'$exists': 1}}
+        ).sort('rating', pymongo.DESCENDING).limit(100))
+    return render_template('services.html', services=services)
 
 
 @app.route('/create', methods=('GET',))
