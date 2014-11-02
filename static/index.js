@@ -44,10 +44,12 @@ $(document).ready(function () {
 		return false;
 	});
 
-	$('#nav-create').click(function(){
-		$( "#content" ).load( "/create", function() {
-			console.log("loaded script successfully");
-		} );
-		return false;
-	});
+	if ($('#nav-create').attr('href')=='#') {
+		$('#nav-create').click(function(){
+			$( "#content" ).load( "/create", function() {
+				console.log("loaded script successfully");
+			} );
+			return false;
+		});
+	}
 });

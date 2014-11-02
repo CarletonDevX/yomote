@@ -150,11 +150,20 @@ class Service():
             'yoall': yoall,
             'yo': yo,
             'username': req['username']}
-        # TODO add user specific data
         if 'location' in req:
             locals_['location'] = req['location']
         if 'link' in req:
             locals_['link'] = req['link']
+        if self.need_extra:
+            cursor = db.users.find({'yo_handle': req['username']})
+            if cursor.count() == 0:
+                return
+            u = cursor.next()
+            cursor = db.user_data.find({'user': u['_id'], 'service': self._id})
+            print {'user': u['_id'], 'service': self._id}
+            if cursor.count() == 0:
+                return
+            locals_['user_data'] = cursor.next()['data']
         try:
             eval(self.code, globals_, locals_)
         except Exception, e:
