@@ -1,8 +1,14 @@
 html, body{
 	margin: 0;
 	padding: 0;
+	font-family: Montserrat, arial, sans-serif;
+	font-weight: bold;
 }
 
+*{
+	font-family: Montserrat, arial, sans-serif;
+	font-weight: bold;
+}
 
 .red{
 	/* Rectangle 3: */
@@ -55,7 +61,7 @@ html, body{
 	display: block;
 	font-family: Montserrat, arial, sans-serif;
 	font-weight: bold;
-	font-size: 30px;
+	font-size: 38px;
 	color: #FFFFFF;
 	line-height: 41px;
 /* PIZZAMAS: */
@@ -65,7 +71,7 @@ html, body{
 	padding:0px;
 	font-family: Montserrat, arial, sans-serif;
 	font-weight: bold;
-	font-size: 30px;
+	font-size: 24px;
 	color: #FFFFFF;
 	line-height: 41px;
 /* Request an Uber ride: */
@@ -81,7 +87,7 @@ html, body{
 	font-size: 85px;
 	color: #FFFFFF;
 	text-align: center;
-	line-height: .64;
+	line-height: .79;
 	border-radius: 8px;
 	display: inline-block;
 	
