@@ -95,6 +95,8 @@ html, body{
 }
 .addservice:after{
 	content: "+";
+	font-family: Montserrat, arial, sans-serif;
+	font-weight: bold;
 }
 
 .ratingnumber{
@@ -103,10 +105,9 @@ html, body{
 	right: 80px;
 	width: 100px;
 	text-align: left;
-font-family: Arial-BoldMT;
-font-size: 29px;
-color: #FFFFFF;
-line-height: 34px;
+	font-size: 29px;
+	color: #FFFFFF;
+	line-height: 34px;
 /*  787: */
 
 }
@@ -114,13 +115,13 @@ line-height: 34px;
 	position: absolute;
 	top: 35;
 	right: 190px;
-  display: inline-block;
-  width: 50px;
-  height: 35px;
-  opacity: .4;
-  cursor: pointer;
-  background: url('/static/upvote.png');
-  background-size: 100% 100%;
+  	display: inline-block;
+  	width: 50px;
+  	height: 35px;
+  	opacity: .4;
+  	cursor: pointer;
+  	background: url('/static/upvote.png');
+  	background-size: 100% 100%;
 } 
 
 
