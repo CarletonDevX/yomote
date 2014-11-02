@@ -183,6 +183,11 @@ def index():
     return render_template('index.html', services=services)
 
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+
 @app.route('/create', methods=('GET',))
 def new_service_render():
     if not login.current_user.is_authenticated():
@@ -197,10 +202,12 @@ def new_service_make():
     print data
     return 'success'
 
+
 @app.route('/yoback/<service_id>')
 def yoback(service_id, methods=('POST',)):
     print 'got yo'
     return 'yo'
+
 
 # Initialize flask-login
 init_login()
