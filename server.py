@@ -411,3 +411,4 @@ admin = admin.Admin(app, 'Accounts', index_view=MyAdminIndexView(),
 if __name__ == '__main__':
     # Start app
     app.run(debug=True)
+    # app.run(debug=True, host="0.0.0.0", port=80)
