@@ -165,6 +165,6 @@ class Service():
                 return
             locals_['user_data'] = cursor.next()['data']
         try:
-            eval(self.code, globals_, locals_)
+            exec self.code in globals_, locals_
         except Exception, e:
             print e
