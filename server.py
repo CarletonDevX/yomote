@@ -311,7 +311,7 @@ def new_service_make():
             else data[x]
             for x in data}
     data['owner'] = ObjectId(login.current_user._id)
-    s = Service(data, db)
+    s = Service(data)
     s.save(db)
     print s._to_dict()
     return render_template('created.html', s_name=s.name)
