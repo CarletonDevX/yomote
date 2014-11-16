@@ -16,14 +16,19 @@ $(document).ready(function () {
 
 	$('#nav-search').keydown(function(){
 		$( "#content" ).load( "/search?search="+$('#nav-search').val(), function() {
-			console.log("loaded script successfully");
 			colors();
 		} );
 	});
 
 	$('#nav-hot').click(function(){
 		$( "#content" ).load( "/hot", function() {
-			console.log("loaded script successfully");
+			colors();
+		} );
+		return false;
+	});
+
+	$('#nav-mine').click(function(){
+		$( "#content" ).load( "/mine", function() {
 			colors();
 		} );
 		return false;
@@ -31,7 +36,6 @@ $(document).ready(function () {
 
 	$('#nav-recent').click(function(){
 		$( "#content" ).load( "/recent", function() {
-			console.log("loaded script successfully");
 			colors();
 		} );
 		return false;
@@ -39,7 +43,6 @@ $(document).ready(function () {
 
 	$('#nav-about').click(function(){
 		$( "#content" ).load( "/static/about.html", function() {
-			console.log("loaded script successfully");
 		} );
 		return false;
 	});
@@ -47,7 +50,6 @@ $(document).ready(function () {
 	if ($('#nav-create').attr('href')=='#') {
 		$('#nav-create').click(function(){
 			$( "#content" ).load( "/create", function() {
-				console.log("loaded script successfully");
 			} );
 			return false;
 		});

@@ -219,9 +219,9 @@ class MyAdminIndexView(admin.AdminIndexView):
 
             login.login_user(user)
             return redirect(url_for('.index'))
-        link = "<p>Already have an account? <a href='" + \
-               url_for('admin.login_view') + \
-               ">Click here to log in.</a></p>"
+        link = ("<p>Already have an account? <a href='" +
+               url_for('admin.login_view') +
+               "'>Click here to log in.</a></p>")
         self._template_args['form'] = form
         self._template_args['link'] = link
         return super(MyAdminIndexView, self).index()
@@ -232,7 +232,7 @@ class MyAdminIndexView(admin.AdminIndexView):
        if helpers.validate_form_on_submit(form):
          yosend=Yo(token=creds.yo_api_key)
          uid=str(db.resettoken.insert({"yo_handle":str(form.yo_handle.data)}))
-         yosend.youser(str(form.yo_handle.data),"http://7fb2443b.ngrok.com/reset/"+uid)
+         yosend.youser(str(form.yo_handle.data), "http://yomote.co/reset/"+uid)
          return 'Check your Yo to reset password!'
        return render_template("reset.html", form=form)
 
@@ -247,8 +247,9 @@ class MyAdminIndexView(admin.AdminIndexView):
 def index():
     services = map(Service,
         db.services.find({'yo_handle': {'$exists': 1}}).limit(100))
+    is_logged = login.current_user.is_authenticated()
     return render_template('index.html', services=services,
-        c=('#' if login.current_user.is_authenticated() else '/admin'))
+        c=('#' if is_logged else '/admin'), lg=is_logged)
 
 
 @app.route('/recent')
@@ -267,6 +268,16 @@ def hot_yos():
             {'yo_handle': {'$exists': 1}}
         ).sort('rating', pymongo.DESCENDING).limit(100))
     return render_template('services.html', services=services)
+
+@app.route('/mine')
+def my_yos():
+    if login.current_user.is_authenticated():
+        id_ = ObjectId(login.current_user._id)
+        services = map(Service,
+            db.services.find(
+                {'owner': id_}
+            ).sort('ts', pymongo.DESCENDING))
+        return render_template('services.html', services=services)
 
 
 @app.route('/search')
