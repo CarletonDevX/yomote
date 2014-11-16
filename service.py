@@ -1,5 +1,6 @@
 import random
 import re
+import string
 from datetime import datetime
 
 import requests
@@ -11,7 +12,7 @@ def random_yo_handle():
     r = ''.join(
         random.choice(string.ascii_uppercase + string.digits)
         for _ in range(8))
-    return 'Y4-'+r
+    return 'YM'+r
 
 # Create service model.
 class Service():
@@ -78,37 +79,36 @@ class Service():
         return self.name
 
     def _make_yo_handle(self, db):
-        return False  # TODO
-        if self._id is None:
-            return False
         while True:
             handle = random_yo_handle()
+            print "trying handle:", handle
             r = requests.post(
                 'https://api.justyo.co/accounts/',
                 data={
                     'new_account_username': handle,
                     'new_account_passcode': creds.universal_password,
-                    'callback_url': 'http://yomote.co/yoback/' + self._id,
-                    'needs_location': self.needs_location,
+                    'callback_url': 'http://yomote.co/yoback/' + str(self._id),
                     'api_token': creds.yo_api_key
                 })
             if r.ok:
-                self.yo_handle = handle
+                self.yo_handle = r.json()['username']
+                self.yo_api_key = r.json()['api_token']
+                return True
+            else:
+                print r.content
         return True
 
     def save(self, db):
+        print 'saving'
         if self._id is not None:
-            print 'id not none'
             if db.services.find({'_id': self._id}).count() > 0:
-                print 'service exists'
                 db.services.update({'_id': self._id},
                                    {'$set': self._to_dict(False)})
                 return True
-            print "service doesn't"
             return False
-        print 'id none'
         self._id = db.services.insert(self._to_dict())
-        print self._id
+        self._make_yo_handle(db)
+        self.save(db)
         return True
 
     def run(self, db, req):

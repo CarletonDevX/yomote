@@ -311,54 +311,10 @@ def new_service_make():
             else data[x]
             for x in data}
     data['owner'] = ObjectId(login.current_user._id)
-    s = Service(data)
+    s = Service(data, db)
+    s.save(db)
     print s._to_dict()
-    s.save(db)
-    print s._to_dict()    
-    return redirect('/finish/' + str(s._id))
-
-
-@app.route('/finish/<service_id>', methods=('GET',))
-def finish_service_render(service_id):
-    if not login.current_user.is_authenticated():
-        return redirect(url_for('admin.login_view'))
-    oid = None
-    try:
-        oid = ObjectId(service_id)
-    except Exception, e:
-        return redirect('/sry/poorly%20formed%20url')
-    cursor = db.services.find({'_id': oid})
-    if cursor.count() == 0:
-        return redirect('/sry/no%20such%20service%20exists')
-    s = Service(cursor.next())
-    if str(s.owner) != login.current_user._id:
-        return render_template('sry.html',
-            text='but this doesn\'t belong to you')
-    return render_template('finish_service.html',
-        s_id=str(s._id), s_name=s.name,
-        callback="http://yomote.co/yoback/" + str(s._id))
-
-
-@app.route('/finish/<service_id>', methods=('POST',))
-def finish_service_make(service_id):
-    if not login.current_user.is_authenticated():
-        return redirect(url_for('admin.login_view'))
-    oid = None
-    try:
-        oid = ObjectId(service_id)
-    except Exception, e:
-        return redirect('/sry/poorly%20formed%20url')
-    cursor = db.services.find({'_id': oid})
-    if cursor.count() == 0:
-        return redirect('/sry/no%20such%20service%20exists')
-    s = Service(cursor.next())
-    if str(s.owner) != login.current_user._id:
-        return render_template('sry.html',
-            text='but this doesn\'t belong to you')
-    s.yo_handle = request.form['yo_handle'].upper().strip()
-    s.yo_api_key = request.form['yo_api_key'].strip()
-    s.save(db)
-    return redirect('/')
+    return render_template('created.html', s_name=s.name)
 
 
 @app.route('/sry/<text>')
