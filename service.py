@@ -144,7 +144,8 @@ class Service():
             print r.ok, r.text
             return r.ok
 
-        globals_ = {'requests': requests, 're': re, 'now': datetime.now, 'TwilioRestClient': TwilioRestClient}
+        globals_ = {'requests': requests, 're': re, 'now': datetime.now,
+                    'TwilioRestClient': TwilioRestClient}
         locals_ = {
             'subscribers_count': subscribers_count,
             'yoall': yoall,

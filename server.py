@@ -249,6 +249,7 @@ def index():
         db.services.find({'yo_handle': {'$exists': 1}}).limit(100))
     is_logged = login.current_user.is_authenticated()
     return render_template('index.html', services=services,
+        owner=(ObjectId(login.current_user._id) if is_logged else None),
         c=('#' if is_logged else '/admin'), lg=is_logged)
 
 
@@ -258,7 +259,9 @@ def recent_yos():
         db.services.find(
             {'yo_handle': {'$exists': 1}}
         ).sort('ts', pymongo.DESCENDING).limit(100))
-    return render_template('services.html', services=services)
+    is_logged = login.current_user.is_authenticated()
+    return render_template('services.html', services=services,
+        owner=(ObjectId(login.current_user._id) if is_logged else None))
 
 
 @app.route('/hot')
@@ -267,7 +270,9 @@ def hot_yos():
         db.services.find(
             {'yo_handle': {'$exists': 1}}
         ).sort('rating', pymongo.DESCENDING).limit(100))
-    return render_template('services.html', services=services)
+    is_logged = login.current_user.is_authenticated()
+    return render_template('services.html', services=services,
+        owner=(ObjectId(login.current_user._id) if is_logged else None))
 
 @app.route('/mine')
 def my_yos():
@@ -277,12 +282,14 @@ def my_yos():
             db.services.find(
                 {'owner': id_}
             ).sort('ts', pymongo.DESCENDING))
-        return render_template('services.html', services=services)
+        return render_template('services.html', services=services,
+            owner=ObjectId(login.current_user._id))
 
 
 @app.route('/search')
 def search_yos():
     search_terms = request.args['search'].strip().split()
+    id_ = ObjectId(login.current_user._id)
     services = map(Service,
         db.services.find(
             {'$or':[
@@ -291,7 +298,8 @@ def search_yos():
                 {'name': {'$regex': '|'.join(search_terms)}}
             ], 'yo_handle': {'$exists': 1}}
         ).sort('rating', pymongo.DESCENDING).limit(100))
-    return render_template('services.html', services=services)
+    return render_template('services.html', services=services,
+        owner=(ObjectId(login.current_user._id) if is_logged else None))
 
 
 @app.route('/create', methods=('GET',))
@@ -314,12 +322,51 @@ def new_service_make():
     s = Service(data)
     s.save(db)
     print s._to_dict()
-    return render_template('created.html', s_name=s.name)
+    return render_template('msg.html', msg=("%s has been created!"%s.name))
+
+@app.route('/delete/<service_id>', methods=('GET',))
+def delete_yo(service_id):
+    if not login.current_user.is_authenticated():
+        return redirect(url_for('admin.login_view'))
+    oid = None
+    try:
+        oid = ObjectId(service_id)
+    except Exception, e:
+        return redirect('/sry/poorly%20formed%20url')
+    cursor = db.services.find({'_id': oid})
+    if cursor.count() == 0:
+        return redirect('/sry/no%20such%20service%20exists')
+    s = Service(cursor.next())
+    if ObjectId(login.current_user._id) != s.owner:
+        return redirect('/sry/no%20such%20service%20exists')
+    db.services.remove({'_id': s._id})
+    return render_template('msg.html', msg=('%s has been deleted.'%s.name))
+
+@app.route('/edit/<service_id>', methods=('GET',))
+def edit_yo(service_id):
+    if not login.current_user.is_authenticated():
+        return redirect(url_for('admin.login_view'))
+    oid = None
+    try:
+        oid = ObjectId(service_id)
+    except Exception, e:
+        return redirect('/sry/poorly%20formed%20url')
+    cursor = db.services.find({'_id': oid})
+    if cursor.count() == 0:
+        return redirect('/sry/no%20such%20service%20exists')
+    s = Service(cursor.next())
+    if ObjectId(login.current_user._id) != s.owner:
+        return redirect('/sry/no%20such%20service%20exists')
+    return redirect('/sry/edit%20not%20yet%20implemented')
 
 
 @app.route('/sry/<text>')
 def sry(text):
     return render_template('sry.html', text=text)
+
+@app.route('/docs')
+def docs():
+    return render_template('docs.html')
 
 
 @app.route('/add/<service_id>', methods=('GET',))

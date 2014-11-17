@@ -1,9 +1,16 @@
 {% for s in services %}
 <div class="service">
-    <h1 class="servicetitle">{{s.name }}</h1>
+    <h1 class="servicetitle">{{s.name}}</h1>
     <h2 class="servicedescription">{{s.dscrpt}}</h2>
     <h3 class="ratingnumber">Yo's {{s.rating }}</h3>
     <a class="vote"></a>
     <a class="addservice" href="/add/{{ s._id }}"></a>
+    {% if s.owner == owner %}
+    <span class="manageservice">
+        <a class="editservice ymlink" href="/edit/{{ s._id }}">edit</a>
+        &nbsp;&nbsp;
+        <a class="deleteservice ymlink" href="/delete/{{ s._id }}" onclick="return confirm('Are you sure you want to delete {{s.name}}?')">&nbsp;&times;&nbsp;</a>
+    </span>
+    {% endif %}
 </div>
 {% endfor %}

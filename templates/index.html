@@ -6,13 +6,12 @@
         <link rel="stylesheet" type="text/css" href="/static/main.css">
         <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
         <script type="text/javascript" src="/static/index.js"></script>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     </head>
     <body>
+        <header id="topbanner">
+            <a style="text-decoration:none" href="/"> <h1 id="titlebox">Yomote</h1></a>
+        </header>
         <div id="main">
-            <header id="topbanner">
-                <a style="text-decoration:none" href="/"> <h1 id="titlebox">Yomote</h1></a>
-            </header>
             <nav id="search-nav">
                 <div id="search-box">
                     <input id="nav-search" type="text" placeholder="Search">
@@ -29,17 +28,8 @@
                     {% endif %}
                     <a id="nav-about" href="#"><li>About</li></a><br>
                 </ul>
-            </nav>
-            <div id="content">
-                {% for s in services %}
-                <div class="service">
-                    <h1 class="servicetitle">{{s.name }}</h1>
-                    <h2 class="servicedescription">{{s.dscrpt}}</h2>
-                    <h3 class="ratingnumber">Yo's {{s.rating }}</h3>
-                    <a class="vote"></a>
-                    <a class="addservice" href="/add/{{ s._id }}"></a>
-                </div>
-                {% endfor %}
+            </nav><div id="content">
+                {% include 'services.html' %}
             </div>
         </div>
     </body>
