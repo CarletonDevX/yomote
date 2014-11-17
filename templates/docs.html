@@ -11,39 +11,58 @@
         <div id="full-body">
             <h1>YOMOTE Documentation</h1>
             <ul>
+                <h2>Main methods:</h2>
                 <li>
-                    subscribers_count()
-                    prints the number of yo requests
+                    <pre>subscribers_count()</pre><br>
+                    returns the number of yo subscribers
                 </li>
                 <li>
-                    yoall(link=None)
-                    yo’s every subscriber with the given link
+                    <pre>yoall(link=None)</pre><br>
+                    yo’s every subscriber with the given link,<br>
+                    returns True if successful
                 </li>
                 <li>
-                    yo(username, link=None, location=None)
-                    sends a yo to the user with a given link and location
+                    <pre>yo(username, link=None, location=None)</pre><br>
+                    sends a yo to the user with a given link or location,<br>
+                    returns True if successful
                 </li>
                 <li>
-                    Requests
-                    Username
-                    Location
-                    Link
-                    Re
-                    Python regular expression library
-                    Now
-                    Returns Current date time
-                    Twiliorestclient
-                    User_data
-                    Edit 
-                    delete
+                    <pre>username</pre><br>
+                    the Yo user name from the incoming Yo
                 </li>
-            
-            
-
-            
-
-            
-
+                <li>
+                    <pre>location</pre><br>
+                    the location (if any) from the incoming Yo
+                </li>
+                <li>
+                    <pre>link</pre><br>
+                    the link (if any) from the incoming Yo
+                </li>
+                <li>
+                    <pre>user_data</pre><br>
+                    a dictionary of data asked for before users add the service
+                </li>
+                <li>
+                    <h2>Other variables:</h2>
+                    <ul>
+                        <li>
+                            <pre>requests</pre><br>
+                            the python requests library
+                        </li>
+                        <li>
+                            <pre>re</pre><br>
+                            the python regular expression library
+                        </li>
+                        <li>
+                            <pre>twiliorestclient</pre><br>
+                            the python Twilio API library
+                        </li>
+                        <li>
+                            <pre>now</pre><br>
+                            returns current date time
+                        </li>
+                    </ul>
+                </li>
             </ul>
             <a class="ymlink" href="/">home</a>
         </div>

@@ -25,6 +25,8 @@
                     <a id="nav-create" href="{{c}}"><li>Create</li></a><br>
                     {% if not lg %}
                         <a href="/admin"><li>Log In</li></a><br>
+                    {% else %}
+                        <a href="/admin/logout"><li>Log Out</li></a><br>
                     {% endif %}
                     <a id="nav-about" href="#"><li>About</li></a><br>
                 </ul>

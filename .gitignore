@@ -56,3 +56,4 @@ target/
 # Other
 data
 creds.py
+.DS_Store
