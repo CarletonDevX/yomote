@@ -11,8 +11,8 @@
         <header id="topbanner">
             <a style="text-decoration:none" href="/"> <h1 id="titlebox">Yomote</h1></a>
         </header>
-        <div id="main">
-            <nav id="search-nav">
+        <div id="main"><!--
+         --><nav id="search-nav">
                 <div id="search-box">
                     <input id="nav-search" type="text" placeholder="Search">
                 </div>
@@ -28,7 +28,8 @@
                     {% endif %}
                     <a id="nav-about" href="#"><li>About</li></a><br>
                 </ul>
-            </nav><div id="content">
+            </nav><!--
+         --><div id="content">
                 {% include 'services.html' %}
             </div>
         </div>
