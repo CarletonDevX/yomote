@@ -130,15 +130,14 @@ html, body{
     font-family: Montserrat, arial, sans-serif;
     font-weight: bold;
     font-size: 64px;
+    line-height: 80px;
     color: #FFFFFF;
-    border: 6px solid #FFFFFF;
-    background-color: #3498D8;
     text-align: center;
     text-decoration: none;
-    height: 80px;
-    width: 390px;
     margin: 0 auto;
-    line-height: 1;
+    display: block;
+    padding: 20px 0;
+    text-transform: uppercase;
 }
 
 #search-nav{
@@ -187,9 +186,8 @@ html, body{
 #nav-buttonsection li{
     color:#FFFFFF;
     margin: 0;
-    border: 3px solid #FFFFFF;
     margin-bottom: 17px;
-    padding: 30px 0px;
+    padding: 32px 0px;
     width: 270px;
     background: rgba(255,255,255,.4);
     display: inline-block;
@@ -214,9 +212,9 @@ html, body{
 #main{
     display: block;
     width: 100%;
-    height: -webkit-calc(100% - 152px);
-    height: -moz-calc(100% - 152px);
-    height: calc(100% - 152px);
+    height: -webkit-calc(100% - 180px);
+    height: -moz-calc(100% - 180px);
+    height: calc(100% - 180px);
     position: relative;
     padding: 0;
     margin: 0;
@@ -225,9 +223,9 @@ html, body{
 
 #full-body{
     width: 100%;
-    height: -webkit-calc(100% - 152px);
-    height: -moz-calc(100% - 152px);
-    height: calc(100% - 152px);
+    height: -webkit-calc(100% - 180px);
+    height: -moz-calc(100% - 180px);
+    height: calc(100% - 180px);
     padding-top: 40px;
     overflow: hidden;
     box-sizing: border-box;

@@ -196,12 +196,13 @@ class MyAdminIndexView(admin.AdminIndexView):
 
         if login.current_user.is_authenticated():
             return redirect(url_for('.index'))
-        link = "<p>Don\'t have an account? <a href='" + \
+        link = "<p>Don\'t have an account?<br><a href='" + \
                url_for('.register_view') + \
                "'>Click here to register.</a></p>" + \
-                "<p>Forget your password? <a href='" + \
+                "<p>Forget your password?<br><a href='" + \
                url_for('.get_token') + \
                "'>Reset Here.</a></p>"
+        self._template_args['type'] = 'Log In'
         self._template_args['form'] = form
         self._template_args['link'] = link
         return super(MyAdminIndexView, self).index()
@@ -219,22 +220,29 @@ class MyAdminIndexView(admin.AdminIndexView):
 
             login.login_user(user)
             return redirect(url_for('.index'))
-        link = ("<p>Already have an account? <a href='" +
-               url_for('admin.login_view') +
-               "'>Click here to log in.</a></p>")
+        link = ("<p>Already have an account?<br><a href='" +
+                url_for('admin.login_view') +
+                "'>Click here to log in.</a></p>")
+        self._template_args['type'] = 'Register'
         self._template_args['form'] = form
         self._template_args['link'] = link
         return super(MyAdminIndexView, self).index()
 
     @expose('/forgetpassword/',methods=('GET','POST'))
     def get_token(self):
-       form=ForgetPasswordForm(request.values)
-       if helpers.validate_form_on_submit(form):
-         yosend=Yo(token=creds.yo_api_key)
-         uid=str(db.resettoken.insert({"yo_handle":str(form.yo_handle.data)}))
-         yosend.youser(str(form.yo_handle.data), "http://yomote.co/reset/"+uid)
-         return 'Check your Yo to reset password!'
-       return render_template("reset.html", form=form)
+        form=ForgetPasswordForm(request.values)
+        if helpers.validate_form_on_submit(form):
+            yosend=Yo(token=creds.yo_api_key)
+            uid=str(db.resettoken.insert({"yo_handle":str(form.yo_handle.data)}))
+            yosend.youser(str(form.yo_handle.data), "http://yomote.co/reset/"+uid)
+            return 'Check your Yo to reset password!'
+        link = ("<p>Don\'t have an account?<br><a href='" +
+                url_for('admin.register_view') +
+                "'>Click here to register.</a></p>")
+        self._template_args['type'] = 'Reset Password'
+        self._template_args['form'] = form
+        self._template_args['link'] = link
+        return super(MyAdminIndexView, self).index()
 
     @expose('/logout/')
     def logout_view(self):
@@ -343,6 +351,7 @@ def delete_yo(service_id):
     if ObjectId(login.current_user._id) != s.owner:
         return redirect('/sry/no%20such%20service%20exists')
     db.services.remove({'_id': s._id})
+    db.user_data.remove({'service': s._id})
     return render_template('msg.html', msg=('%s has been deleted.'%s.name))
 
 @app.route('/edit/<service_id>', methods=('GET',))

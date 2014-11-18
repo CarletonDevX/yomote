@@ -1,37 +1,35 @@
 {% extends 'admin/master.html' %}
 {% block body %}
 {{ super() }}
-<div class="stuff">
 <link rel="stylesheet" type="text/css" href="/static/admin.css">
-    <div>
-        {% if current_user.is_authenticated() %}
-        <h1>Flask-Admin example</h1>
-        <p class="stuff">
-            Authentication
-        </p>
-   
-        {% else %}
-        <form class="stuff"method="POST" action="">
-            {{ form.hidden_tag() if form.hidden_tag }}
-            {% for f in form if f.type != 'CSRFTokenField' %}
-            <div>
-            {{ f.label }}
-            {{ f }}
-            {% if f.errors %}
-            <ul>
-                {% for e in f.errors %}
-                <li>{{ e }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            </div>
-            {% endfor %}
-            <button class="submit" type="submit">Submit</button>
-        </form>
-        {{ link | safe }}
-        {% endif %}
-    </div>
+<div class="stuff">
+    {% if current_user.is_authenticated() %}
+    <p>
+        <h1>You're logged in!</h1>
+    </p>
 
-    <a class="stuff" href="/"><i class="icon-arrow-left icon-white"></i> Back</a>
+    {% else %}
+    <h1>{{type}}</h1><br>
+    <form method="POST" action="">
+        {{ form.hidden_tag() if form.hidden_tag }}
+        {% for f in form if f.type != 'CSRFTokenField' %}
+        <div>
+        {{ f.label }}
+        {{ f }}
+        {% if f.errors %}
+        <ul>
+            {% for e in f.errors %}
+            <li>{{ e }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        </div>
+        {% endfor %}
+        <button class="submit" type="submit">Submit</button>
+    </form>
+    {{ link | safe }}
+    {% endif %}
+    <br>
+    <a href="/">home</a>
 </div>
 {% endblock body %}
