@@ -252,6 +252,9 @@ def index():
         owner=(ObjectId(login.current_user._id) if is_logged else None),
         c=('#' if is_logged else '/admin'), lg=is_logged)
 
+@app.route('/code')
+def get_code():
+    return redirect('https://github.com/CarletonDevX/yomote')
 
 @app.route('/recent')
 def recent_yos():
