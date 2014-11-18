@@ -59,3 +59,6 @@ a, a:hover, a:visited{
 a:hover{
     background: rgba(255, 255, 255, .4);
 }
+input[type='text']{
+    text-transform: uppercase;
+}

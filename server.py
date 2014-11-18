@@ -112,7 +112,7 @@ class ResetPassword():
         else:
             self._none = False
             self._id = str(json['_id'])
-            self.yo_handle = json['yo_handle']
+            self.yo_handle = json['yo_handle'].upper()
 
 # Define login and registration forms (for flask-login)
 class LoginForm(form.Form):
@@ -159,7 +159,7 @@ class ResetForm(form.Form):
          validators.EqualTo('newpassword',message='Password Must Match')])
 
 class ForgetPasswordForm(form.Form):
-    yo_handle=fields.TextField('Yo Handle',[validators.Required(),])
+    yo_handle = fields.TextField('Yo Handle',[validators.Required(),])
 
 
 # Initialize flask-login
@@ -232,10 +232,12 @@ class MyAdminIndexView(admin.AdminIndexView):
     def get_token(self):
         form=ForgetPasswordForm(request.values)
         if helpers.validate_form_on_submit(form):
-            yosend=Yo(token=creds.yo_api_key)
-            uid=str(db.resettoken.insert({"yo_handle":str(form.yo_handle.data)}))
-            yosend.youser(str(form.yo_handle.data), "http://yomote.co/reset/"+uid)
-            return 'Check your Yo to reset password!'
+            yosend = Yo(token=creds.yo_api_key)
+            uid = str(db.resettoken.insert(
+                {"yo_handle": str(form.yo_handle.data).upper()}))
+            yosend.youser(str(form.yo_handle.data).upper(),
+                          "http://yomote.co/reset/"+uid)
+            return redirect('/msg/Check%20your%20Yo%20to%20reset%20password!')
         link = ("<p>Don\'t have an account?<br><a href='" +
                 url_for('admin.register_view') +
                 "'>Click here to register.</a></p>")
@@ -445,16 +447,17 @@ def yoback(service_id, methods=('POST',)):
 @app.route('/reset/<token>', methods=['GET', 'POST'])
 def reset(token):
     cursor = db.resettoken.find({'_id': ObjectId(token)})
-    count=cursor.count()
+    count = cursor.count()
     if count==1:
-            usrn=cursor.next()['yo_handle']
-    else: return str(count)
-    form=ResetForm(request.values,yo_handle=usrn)
+        usrn = cursor.next()['yo_handle']
+    else:
+        return redirect('/sry/no%20such%20link%20exists')
+    form = ResetForm(request.values, yo_handle=usrn)
     if request.method == 'POST' and form.validate():
-        handle=form.data['yo_handle']
-        psw=form.data['newpassword']
-        db.users.update({"yo_handle" : handle},{'$set':{ "password":generate_password_hash(psw)
-}})
+        handle = form.data['yo_handle'].upper()
+        psw = form.data['newpassword']
+        db.users.update({"yo_handle" : handle},
+                        {'$set': {"password": generate_password_hash(psw)}})
         return redirect('/')
     return render_template("reset.html", form=form)
 
