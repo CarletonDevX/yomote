@@ -236,7 +236,7 @@ class MyAdminIndexView(admin.AdminIndexView):
             uid = str(db.resettoken.insert(
                 {"yo_handle": str(form.yo_handle.data).upper()}))
             yosend.youser(str(form.yo_handle.data).upper(),
-                          "http://yomote.co/reset/"+uid)
+                          "http://yomote.co/admin/reset/"+uid)
             return redirect('/msg/Check%20your%20Yo%20to%20reset%20password!')
         link = ("<p>Don\'t have an account?<br><a href='" +
                 url_for('admin.register_view') +
@@ -245,6 +245,28 @@ class MyAdminIndexView(admin.AdminIndexView):
         self._template_args['form'] = form
         self._template_args['link'] = link
         return super(MyAdminIndexView, self).index()
+
+    @expose('/reset/<token>', methods=['GET', 'POST'])
+    def reset(self, token):
+        cursor = db.resettoken.find({'_id': ObjectId(token)})
+        count = cursor.count()
+        if count==1:
+            usrn = cursor.next()['yo_handle']
+        else:
+            return redirect('/sry/no%20such%20link%20exists')
+        form = ResetForm(request.values, yo_handle=usrn)
+        if request.method == 'POST' and form.validate():
+            handle = form.data['yo_handle'].upper()
+            psw = form.data['newpassword']
+            db.users.update({"yo_handle" : handle},
+                            {'$set': {"password": generate_password_hash(psw)}})
+            return redirect('/')
+        self._template_args['type'] = 'Reset Password'
+        self._template_args['form'] = form
+        self._template_args['link'] = ''
+        return super(MyAdminIndexView, self).index()
+        return render_template("reset.html", form=form)
+
 
     @expose('/logout/')
     def logout_view(self):
@@ -446,24 +468,6 @@ def yoback(service_id, methods=('POST',)):
     db.services.update({'_id': s._id}, {'$inc': {'rating': 1}})
     return 'yo'
 
-
-#look up the token and direct to reset form
-@app.route('/reset/<token>', methods=['GET', 'POST'])
-def reset(token):
-    cursor = db.resettoken.find({'_id': ObjectId(token)})
-    count = cursor.count()
-    if count==1:
-        usrn = cursor.next()['yo_handle']
-    else:
-        return redirect('/sry/no%20such%20link%20exists')
-    form = ResetForm(request.values, yo_handle=usrn)
-    if request.method == 'POST' and form.validate():
-        handle = form.data['yo_handle'].upper()
-        psw = form.data['newpassword']
-        db.users.update({"yo_handle" : handle},
-                        {'$set': {"password": generate_password_hash(psw)}})
-        return redirect('/')
-    return render_template("reset.html", form=form)
 
 # Initialize flask-login
 init_login()
