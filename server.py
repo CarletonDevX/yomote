@@ -378,6 +378,10 @@ def edit_yo(service_id):
 def sry(text):
     return render_template('sry.html', text=text)
 
+@app.route('/msg/<msg>')
+def msg(msg):
+    return render_template('msg.html', msg=msg)
+
 @app.route('/docs')
 def docs():
     return render_template('docs.html')
